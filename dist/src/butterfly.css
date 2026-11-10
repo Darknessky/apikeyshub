@@ -1,0 +1,61 @@
+/* Each wing hinges at the body; flight and pointer steering use separate groups. */
+.sculpture-body { animation: butterfly-flight 7.5s ease-in-out infinite; }
+.butterfly-steering {
+  transform-origin: 300px 270px;
+  transform: translate(var(--flight-x, 0px), var(--flight-y, 0px)) rotate(var(--flight-roll, 0deg));
+  transition: transform 850ms cubic-bezier(.2,.8,.2,1);
+}
+.butterfly-wing { transform-box: view-box; transform-origin: 32px 34px; }
+.butterfly-wing-left { animation: wingbeat-left 2.8s ease-in-out infinite; }
+.butterfly-wing-right { animation: wingbeat-right 2.8s ease-in-out infinite; }
+.orbital-glow { animation: flight-aura 7.5s ease-in-out infinite; }
+.orbit-comet, .orbit-trail { animation: orbit-travel 15s linear infinite; }
+.orbit-trail-near { opacity: .3; stroke-dashoffset: -1; }
+.orbit-comet-far { animation-duration: 23s; animation-direction: reverse; animation-delay: -8s; opacity: .6; }
+.flight-sparks > * {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: flight-spark 4.5s ease-in-out infinite;
+}
+.flight-sparks > :nth-child(2n) { animation-delay: -1.8s; animation-duration: 5.5s; }
+.flight-sparks > :nth-child(3n) { animation-delay: -3s; }
+.flight-sparks > :nth-child(5n) { animation-delay: -2.5s; animation-duration: 6s; }
+.orbit-provider:is(:hover, :focus-visible) { animation-play-state: paused; }
+
+@keyframes butterfly-flight {
+  0%, 100% { transform: translate(0, 3px) rotate(-3deg); }
+  28% { transform: translate(9px, -12px) rotate(1deg); }
+  58% { transform: translate(-4px, -20px) rotate(-5deg); }
+  80% { transform: translate(-8px, -6px) rotate(-1deg); }
+}
+@keyframes wingbeat-left {
+  0%, 46%, 100% { transform: scaleX(1) skewY(0deg); }
+  22% { transform: scaleX(.52) skewY(8deg); }
+  72% { transform: scaleX(.66) skewY(5deg); }
+}
+@keyframes wingbeat-right {
+  0%, 46%, 100% { transform: scaleX(1) skewY(0deg); }
+  22% { transform: scaleX(.52) skewY(-8deg); }
+  72% { transform: scaleX(.66) skewY(-5deg); }
+}
+@keyframes flight-aura {
+  0%, 100% { opacity: .65; transform: scale(.92); }
+  50% { opacity: 1; transform: scale(1.16) translateY(-9px); }
+}
+@keyframes orbit-travel { to { stroke-dashoffset: -100; } }
+@keyframes flight-spark {
+  0%, 100% { opacity: .25; transform: scale(.75) translateY(0); }
+  50% { opacity: .9; transform: scale(1.1) translateY(-5px); }
+}
+
+/* Suspend ambient loops outside the viewport and when the tab is hidden. */
+.motion-offscreen, .motion-offscreen *, .motion-offscreen::before, .motion-offscreen::after,
+.motion-offscreen *::before, .motion-offscreen *::after,
+.page-inactive *, .page-inactive *::before, .page-inactive *::after {
+  animation-play-state: paused !important;
+}
+.motion-paused .butterfly-steering { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .butterfly-steering, .butterfly-wing, .sculpture-body, .orbital-glow, .flight-sparks > * { transform: none; }
+  .orbit-comet, .orbit-trail { display: none; }
+}

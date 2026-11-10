@@ -1,0 +1,139 @@
+/* Motion follows the same soft violet light used throughout the directory. */
+:root { --motion-ease: cubic-bezier(.22, 1, .36, 1); }
+
+.nav-link .icon,
+.search-shortcut .icon,
+.search-wrap > .icon,
+.card-identity > .provider-mark,
+.ribbon-providers .provider-mark,
+.build-steps article > .icon,
+.build-steps h3,
+.guide-steps .step-number,
+.footer-top > a:last-child .icon {
+  transition: transform .45s var(--motion-ease), color .3s ease, opacity .3s ease;
+}
+.nav-link,
+.filter-chip,
+.select-wrap select,
+.tab {
+  transition: color .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.check-box .icon { transition: opacity .18s ease, transform .28s var(--motion-ease); }
+.card-orbit { transition: transform .8s var(--motion-ease), opacity .6s ease; }
+.guide-steps article {
+  transition: border-color .35s ease, background .35s ease, box-shadow .35s ease;
+}
+.guide-steps article::before { transition: transform .55s var(--motion-ease); transform-origin: left; }
+.guide-steps .step-number { display: inline-block; }
+.footer-brand span { transition: transform .6s var(--motion-ease); }
+
+/* The sheen sits above the button fill and never intercepts a click. */
+.hero-actions .button-primary { position: relative; isolation: isolate; overflow: hidden; }
+.hero-actions .button-primary::before {
+  content: '';
+  position: absolute;
+  inset: -70% auto -70% -55%;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, #ffffff45, transparent);
+  transform: translateX(-140%) rotate(24deg);
+  pointer-events: none;
+}
+
+/* Small details react without shifting card positions or their reveal animations. */
+.provider-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--card-hue), transparent);
+  opacity: 0;
+  transform: scaleX(.35);
+  transition: transform .65s var(--motion-ease), opacity .35s ease;
+  pointer-events: none;
+}
+.provider-card:focus-within::before { opacity: .9; transform: scaleX(1); }
+.guide-steps article:focus-within { border-color: #b69aff60; }
+.filter-chip:hover { background: #b69aff22; }
+.select-wrap select:focus-visible { border-color: #b69aff80; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero::before { animation: ambient-drift 16s ease-in-out infinite; }
+  .hero::after { animation: starlight-breathe 9s ease-in-out infinite; }
+  .hero h1 em { background-size: 190% 100%; animation: type-lustre 9s ease-in-out infinite; }
+  .hero-eyebrow > span { animation: signal-breathe 4s ease-in-out infinite; }
+  .hero-actions .button-primary::before { animation: invitation-sheen 7s ease-in-out 1.2s infinite; }
+  .hero-baseline button .icon { animation: explore-nudge 3.6s ease-in-out 2s infinite; }
+  .build-section::before { animation: invitation-drift 15s ease-in-out infinite; }
+
+  html:not(.motion-paused) .search-wrap:focus-within > .icon { transform: rotate(-12deg) scale(1.1); }
+  html:not(.motion-paused) .filter-option input:not(:checked) + .check-box .icon { transform: scale(.65) rotate(-15deg); }
+
+  @media (hover: hover) and (pointer: fine) {
+    html:not(.motion-paused) .nav-link:hover .icon { transform: translate(2px, -2px); }
+    html:not(.motion-paused) .search-shortcut:hover .icon { transform: rotate(-12deg); }
+    html:not(.motion-paused) .ribbon-providers button:hover .provider-mark { transform: rotate(-7deg) scale(1.08); }
+    html:not(.motion-paused) .provider-card:hover .card-identity > .provider-mark { transform: translateY(-2px) rotate(-5deg); }
+    html:not(.motion-paused) .provider-card:hover .card-orbit { transform: scale(1.12) translate(-5px, 4px); opacity: .62; }
+    html:not(.motion-paused) .provider-card:hover::before { opacity: .9; transform: scaleX(1); }
+    html:not(.motion-paused) .build-steps article:hover > .icon { transform: translate(2px, -3px) rotate(-8deg); color: #dbc9ff; }
+    html:not(.motion-paused) .build-steps article:hover h3 { transform: translateX(3px); }
+    html:not(.motion-paused) .guide-steps article:hover { border-color: #b69aff55; box-shadow: 0 12px 35px #00000028, inset 0 1px #ffffff08; }
+    html:not(.motion-paused) .guide-steps article:hover::before { transform: scaleX(1.7); }
+    html:not(.motion-paused) .guide-steps article:hover .step-number { transform: translateY(-3px); }
+    html:not(.motion-paused) .footer-brand:hover span { transform: translate(8px, -8px) rotate(-6deg); }
+    html:not(.motion-paused) .footer-top > a:last-child:hover .icon { transform: translateX(5px); }
+  }
+}
+
+@keyframes ambient-drift {
+  0%, 100% { transform: translate(-1%, 1%) scale(1); }
+  50% { transform: translate(3%, -3%) scale(1.09); }
+}
+@keyframes starlight-breathe {
+  0%, 100% { opacity: .13; }
+  50% { opacity: .24; }
+}
+@keyframes type-lustre {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes signal-breathe {
+  0%, 100% { opacity: .65; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.18); }
+}
+@keyframes invitation-sheen {
+  0%, 62% { transform: translateX(-140%) rotate(24deg); }
+  85%, 100% { transform: translateX(570%) rotate(24deg); }
+}
+@keyframes explore-nudge {
+  0%, 65%, 100% { translate: 0 0; }
+  78% { translate: 0 4px; }
+  89% { translate: 0 -1px; }
+}
+@keyframes invitation-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-16px, 12px) scale(1.045); }
+}
+
+/* Offscreen and background work is paused by the motion controller. */
+.motion-offscreen,
+.motion-offscreen *,
+.motion-offscreen::before,
+.motion-offscreen::after,
+.motion-offscreen *::before,
+.motion-offscreen *::after,
+.page-inactive *,
+.page-inactive *::before,
+.page-inactive *::after {
+  animation-play-state: paused !important;
+}
+.motion-paused .provider-card::before { transform: none; }
+.motion-paused .footer-brand:hover span { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-actions .button-primary::before { display: none; }
+  .provider-card::before { transform: none; }
+  .footer-brand:hover span { transform: none; }
+}
